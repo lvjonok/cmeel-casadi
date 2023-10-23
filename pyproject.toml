@@ -1,0 +1,23 @@
+[build-system]
+build-backend = "cmeel"
+requires = ["cmeel[build]"]
+
+[project]
+description = "cmeel distribution for CasADi - a symbolic framework for numeric optimization"
+license = "EPL-2.0"
+name = "cmeel-casadi"
+requires-python = ">= 3.8"
+version = "20230000.0"
+
+[project.urls]
+homepage = "https://github.com/lvjonok/cmeel-casadi"
+repository = "https://github.com/lvjonok/cmeel-casadi.git"
+
+[tool.cmeel]
+build-number = 4
+has-sitelib = false
+run-tests = false
+source = "casadi"
+
+[tool.tomlsort]
+all = true
