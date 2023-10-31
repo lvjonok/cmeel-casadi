@@ -1,0 +1,70 @@
+name: Release on GitHub & PyPI
+
+on:
+  push:
+#     tags:
+#       - "v*"
+
+jobs:
+  build:
+    name: "${{ matrix.build }} ${{ matrix.os }} ${{ matrix.arch }}"
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: ["ubuntu-latest"] #, "macos-latest"]
+        arch: ["x86_64"]
+        build: [
+            # "cp38-*",
+            # "cp39-*",
+            "cp310-manylinux*",
+            # "cp311-*",
+          ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "true"
+      - run: python -m pip install cibuildwheel==2.16.2
+      - run: python -m cibuildwheel --output-dir wh
+        env:
+          CIBW_BEFORE_BUILD_LINUX: "bash scripts/before_build.sh"
+          CIBW_BUILD: ${{ matrix.build }}
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_28_x86_64"
+          CIBW_MANYLINUX_PYPY_X86_64_IMAGE: "quay.io/pypa/manylinux_2_28_x86_64"
+          CIBW_MANYLINUX_AARCH64_IMAGE: "quay.io/pypa/manylinux_2_28_aarch64"
+          CIBW_REPAIR_WHEEL_COMMAND: ""
+          CIBW_ENVIRONMENT: CMEEL_LOG_LEVEL="DEBUG"
+      - uses: actions/upload-artifact@v3
+        with:
+          path: wh
+
+  sdist:
+    name: "build sdist"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: setup
+        run: |
+          python -m pip install -U pip
+          python -m pip install build cmeel[build]
+      - name: build sdist
+        run: python -m build -nso dist .
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist
+  # release:
+  #   needs: ["build", "sdist"]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/download-artifact@v3
+  #     - run: pipx install twine
+  #     - run: twine upload -u __token__ -p "${{ secrets.PYPI_TOKEN }}" artifact/cmeel_example*.whl
+  #     - run: twine upload -u __token__ -p "${{ secrets.PYPI_TOKEN }}" artifact/cmeel_example*.tar.gz || true
+  #     - run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+  #     - run: gh release create -t "Release ${{ env.TAG}}" -n "$(awk '/## \[${{ env.TAG }}] - /{flag=1;next}/## \[/{flag=0}flag' CHANGELOG.md)" ${{ env.TAG }} artifact/cmeel_example*.{whl,tar.gz}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
