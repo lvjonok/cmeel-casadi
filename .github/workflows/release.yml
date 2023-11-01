@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         python: ["python3.9", "python3.10", "python3.11"]
-        os: ["ubuntu-latest", "macos-latest"]
+        os: ["ubuntu-latest"]
     steps:
       - uses: actions/checkout@v3
         with:
