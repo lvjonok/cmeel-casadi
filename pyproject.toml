@@ -6,8 +6,8 @@ requires = ["cmeel[build]"]
 description = "cmeel distribution for CasADi - a symbolic framework for numeric optimization"
 license = "EPL-2.0"
 name = "cmeel-casadi"
-requires-python = ">= 3.8"
-version = "20230000.0"
+requires-python = ">= 3.9"
+version = "0.1.0"
 
 [project.urls]
 homepage = "https://github.com/lvjonok/cmeel-casadi"
@@ -21,13 +21,66 @@ source = "casadi"
 configure-args = [
     "-DWITH_PYTHON=ON",
     "-DWITH_EXAMPLES=OFF",
-    "-DPYTHON_INCLUDE_DIR=/opt/_internal/cpython-3.10.13/include/python3.10",
+    # "-DPYTHON_INCLUDE_DIR=/opt/_internal/cpython-3.10.13/include/python3.10",
     "-DLIB_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib",
     "-DINCLUDE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/include",
-    "-DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/python3.10/site-packages/",
+    # "-DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/python3.10/site-packages/",
     "-DCMAKE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/cmake/casadi",
     "-DWITH_SELFCONTAINED=ON",
     "-DWITH_DEEPBIND=ON",
+    # solvers
+    "-DWITH_BUILD_REQUIRED=ON",
+    # "-DWITH_BUILD_BONMIN=ON",
+    # "-DWITH_BONMIN=ON",
+    "-DWITH_IPOPT=ON",
+    "-DWITH_BUILD_IPOPT=ON",
+    "-DWITH_BUILD_LAPACK=ON ",
+    "-DWITH_LAPACK=ON ",
+    "-DWITH_MUMPS=ON",
+    # "-DWITH_CLP=ON ",
+    # "-DWITH_BUILD_CLP=ON",
+    # "-DWITH_CBC=ON",
+    # "-DWITH_BUILD_CBC=ON",
+    "-DWITH_THREAD=ON",
+    # "-DWITH_QPOASES=ON",
+    # "-DWITH_HPIPM=ON",
+    # "-DWITH_BLASFEO=ON",
+    # "-DWITH_BUILD_HPIPM=ON",
+    # "-DWITH_BUILD_BLASFEO=ON",
+    # "-DWITH_HIGHS=ON",
+    # "-DWITH_BUILD_HIGHS=ON",
+    # "-DWITH_BUILD_SPRAL=ON",
+    # "-DWITH_SPRAL=ON",
+    # "-DWITH_PROXQP=ON",
+    "-DWITH_OSQP=ON",
+    # "-DWITH_SUPERSCS=ON",
+    # "-DWITH_KNITRO=ON",
+    # "-DWITH_MOCKUP_KNITRO=ON",
+    # "-DWITH_CPLEX=ON",
+    # "-DWITH_MOCKUP_CPLEX=ON",
+    # "-DWITH_GUROBI=ON",
+    # "-DWITH_MOCKUP_GUROBI=ON",
+    # "-DWITH_HSL=ON",
+    # "-DWITH_MOCKUP_HSL=ON",
+    "-DWITH_WORHP=ON",
+    "-DWITH_MOCKUP_WORHP=ON",
+    # "-DWITH_SUNDIALS=ON",
+    # "-DWITH_BUILD_SUNDIALS=ON",
+    # "-DWITH_BUILD_CSPARSE=ON",
+    # "-DWITH_BUILD_METIS=ON",
+    # "-DWITH_BUILD_BLASFEO=ON",
+    # "-DWITH_BUILD_SUPERSCS=ON",
+    # "-DWITH_BUILD_OSQP=ON",
+    # "-DWITH_BUILD_SIMDE=ON",
+    # "-DWITH_BUILD_PROXQP=ON",
+    # "-DWITH_SNOPT=ON",
+    # "-DWITH_MOCKUP_SNOPT=ON",
+    # "-DWITH_AMPL=ON",
+    # "-DWITH_BLOCKSQP=ON",
+    # "-DWITH_SLEQP=ON",
+    # "-DWITH_SLEQP_BUILD=ON",
+    # "-DWITH_ALPAQA=ON",
+    # "-DWITH_BUILD_ALPAQA=ON",
 ]
 
 [tool.tomlsort]
