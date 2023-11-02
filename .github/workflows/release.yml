@@ -42,7 +42,7 @@ jobs:
         env:
           CIBW_BUILD: ${{ matrix.build[0] }}
           CIBW_ARCHS: ${{ matrix.arch }}
-          # CIBW_MANYLINUX_X86_64_IMAGE: "dockcross/manylinux_2_28-x64"
+          CIBW_MANYLINUX_X86_64_IMAGE: "dockcross/manylinux_2_28-x64"
           CIBW_REPAIR_WHEEL_COMMAND: ""
           CIBW_ENVIRONMENT: CMEEL_LOG_LEVEL="DEBUG" CMEEL_TEMP_DIR=/tmp/cmeel_out/ CMEEL_CMAKE_ARGS="-DPYTHON_INCLUDE_DIR=${{ env.PYTHON_INCLUDE_DIR }} -DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/${{matrix.build[1]}}/site-packages/"
           CMEEL_TEMP_DIR: /tmp/cmeel_out/
