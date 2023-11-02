@@ -16,8 +16,7 @@ jobs:
             "macos-latest",
           ]
         arch: ["x86_64"]
-        build:
-          [
+        build: [
             # ["cp39-macosx_x86_64", "python3.9"],
             ["cp310-macosx_x86_64", "python3.10"],
             # ["cp311-macosx_x86_64", "python3.11"],
@@ -28,6 +27,15 @@ jobs:
           submodules: "true"
       - name: Install build dependencies
         run: python3 -m pip install cmeel[build] cibuildwheel
+      - name: Setup docker (missing on MacOS)
+        if: runner.os == 'macos'
+        run: |
+          brew install docker
+          colima start
+
+          # For testcontainers to find the Colima socket
+          # https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#cannot-connect-to-the-docker-daemon-at-unixvarrundockersock-is-the-docker-daemon-running
+          sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
       - name: Set python include directory
         run: echo "PYTHON_INCLUDE_DIR=$(bash scripts/include_dir.sh dockcross/manylinux_2_28-x64 ${{matrix.build[1]}})" >> $GITHUB_ENV
       - run: cibuildwheel --output-dir wh
