@@ -1,1 +1,1 @@
-docker run -t docker.io/library/test $1 -c "import sysconfig; print(sysconfig.get_path('include'))"
+docker run -t $1 $2 -c "import sysconfig; print(sysconfig.get_path('include'))"
