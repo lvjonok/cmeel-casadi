@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "cmeel"
-requires = ["cmeel[build]"] #, "cmeel-openblas", "cmeel-lapack"]
+requires = ["cmeel[build]"]
 
 [project]
 description = "cmeel distribution for CasADi - a symbolic framework for numeric optimization"
@@ -20,10 +20,8 @@ source = "casadi"
 configure-args = [
     "-DWITH_PYTHON=ON",
     "-DWITH_EXAMPLES=OFF",
-    # "-DPYTHON_INCLUDE_DIR=/opt/_internal/cpython-3.10.8/include/python3.10",
     "-DLIB_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib",
     "-DINCLUDE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/include",
-    # "-DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/python3.10/site-packages/",
     "-DCMAKE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/cmake/casadi",
     "-DWITH_SELFCONTAINED=ON",
     "-DWITH_DEEPBIND=ON",
