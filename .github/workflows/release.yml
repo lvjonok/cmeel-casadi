@@ -19,8 +19,8 @@ jobs:
         build: [
             # "cp38-*",
             ["cp39-manylinux_x86_64", "python3.9"],
-            # ["cp310-manylinux_x86_64", "python3.10"],
-            # ["cp311-manylinux", "python3.11"],
+            ["cp310-manylinux_x86_64", "python3.10"],
+            ["cp311-manylinux_x86_64", "python3.11"],
             # "pp38-*",
             # "pp39-*",
             # "pp310-*",

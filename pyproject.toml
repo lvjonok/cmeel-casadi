@@ -15,7 +15,6 @@ repository = "https://github.com/lvjonok/cmeel-casadi.git"
 
 [tool.cmeel]
 build-number = 4
-has-sitelib = false
 run-tests = false
 source = "casadi"
 configure-args = [
