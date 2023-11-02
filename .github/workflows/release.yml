@@ -7,26 +7,38 @@ on:
 
 jobs:
   build:
-    name: "${{ matrix.os }} ${{ matrix.python }}"
-    runs-on: ${{ matrix.os }}
+    name: "${{ matrix.build[0] }} ${{ matrix.os }} ${{ matrix.arch }}"
+    runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        python: ["python3.9", "python3.10", "python3.11"]
-        os: ["ubuntu-latest"]
+        os: [
+            "ubuntu-latest",
+            # "macos-latest",
+          ]
+        arch: ["x86_64"]
+        build:
+          [
+            ["cp39-manylinux_x86_64", "python3.9"],
+            ["cp310-manylinux_x86_64", "python3.10"],
+            ["cp311-manylinux_x86_64", "python3.11"],
+          ]
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: "true"
-      - name: Build docker image
-        run: docker build -t test .
       - name: Install build dependencies
-        run: python3 -m pip install cmeel[build]
+        run: python3 -m pip install cmeel[build] cibuildwheel
       - name: Set python include directory
-        run: echo "PYTHON_INCLUDE_DIR=$(bash scripts/include_dir.sh ${{matrix.python}})" >> $GITHUB_ENV
-      - name: Build wheel using cmeel
-        run: python3 -m cmeel -vvv docker -i docker.io/library/test -p ${{matrix.python}} -c -e CMEEL_TEMP_DIR=/tmp/cmeel_out/ -e CMEEL_CMAKE_ARGS="${{env.CMEEL_CMAKE_ARGS}}"
+        run: echo "PYTHON_INCLUDE_DIR=$(bash scripts/include_dir.sh dockcross/manylinux_2_28-x64 ${{matrix.build[1]}})" >> $GITHUB_ENV
+      - run: cibuildwheel --output-dir wh
         env:
-          CMEEL_CMAKE_ARGS: -DPYTHON_INCLUDE_DIR=${{ env.PYTHON_INCLUDE_DIR }} -DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/${{matrix.python}}/site-packages/
+          CIBW_BUILD: ${{ matrix.build[0] }}
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_MANYLINUX_X86_64_IMAGE: "dockcross/manylinux_2_28-x64"
+          CIBW_REPAIR_WHEEL_COMMAND: ""
+          CIBW_ENVIRONMENT: CMEEL_LOG_LEVEL="DEBUG" CMEEL_TEMP_DIR=/tmp/cmeel_out/ CMEEL_CMAKE_ARGS="-DPYTHON_INCLUDE_DIR=${{ env.PYTHON_INCLUDE_DIR }} -DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/${{matrix.build[1]}}/site-packages/"
+          CMEEL_TEMP_DIR: /tmp/cmeel_out/
+          CMEEL_CMAKE_ARGS: -DPYTHON_INCLUDE_DIR=${{ env.PYTHON_INCLUDE_DIR }} -DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/${{matrix.build[1]}}/site-packages/
           PYTHON_INCLUDE_DIR: ${{ env.PYTHON_INCLUDE_DIR }}
       - uses: actions/upload-artifact@v3
         with:

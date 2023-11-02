@@ -15,16 +15,13 @@ repository = "https://github.com/lvjonok/cmeel-casadi.git"
 
 [tool.cmeel]
 build-number = 4
-has-sitelib = false
 run-tests = false
 source = "casadi"
 configure-args = [
     "-DWITH_PYTHON=ON",
     "-DWITH_EXAMPLES=OFF",
-    # "-DPYTHON_INCLUDE_DIR=/opt/_internal/cpython-3.10.13/include/python3.10",
     "-DLIB_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib",
     "-DINCLUDE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/include",
-    # "-DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/python3.10/site-packages/",
     "-DCMAKE_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/cmake/casadi",
     "-DWITH_SELFCONTAINED=ON",
     "-DWITH_DEEPBIND=ON",
