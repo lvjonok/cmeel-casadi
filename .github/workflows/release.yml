@@ -7,21 +7,23 @@ on:
 
 jobs:
   build:
-    name: "${{ matrix.build[0] }} ${{ matrix.os }} ${{ matrix.arch }}"
+    name: "${{ matrix.build[0] }}${{ matrix.arch[0] }} ${{ matrix.os }}"
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [
-            "ubuntu-latest",
-            # "macos-latest",
-          ]
-        arch: ["x86_64"]
+        os: ["ubuntu-latest"]
         build:
           [
-            ["cp39-manylinux_x86_64", "python3.9"],
-            ["cp310-manylinux_x86_64", "python3.10"],
-            ["cp311-manylinux_x86_64", "python3.11"],
+            ["cp39-manylinux_", "python3.9"],
+            ["cp310-manylinux_", "python3.10"],
+            ["cp311-manylinux_", "python3.11"],
           ]
+        arch:
+          [
+            ["aarch64","dockcross/manylinux2014-aarch64"],
+            ["x86_64","dockcross/manylinux_2_28-x64"],
+          ]
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,12 +31,13 @@ jobs:
       - name: Install build dependencies
         run: python3 -m pip install cmeel[build] cibuildwheel
       - name: Set python include directory
-        run: echo "PYTHON_INCLUDE_DIR=$(bash scripts/include_dir.sh dockcross/manylinux_2_28-x64 ${{matrix.build[1]}})" >> $GITHUB_ENV
+        run: echo "PYTHON_INCLUDE_DIR=$(bash scripts/include_dir.sh ${{matrix.arch[1]}} ${{matrix.build[1]}})" >> $GITHUB_ENV
       - run: cibuildwheel --output-dir wh
-        env:
-          CIBW_BUILD: ${{ matrix.build[0] }}
-          CIBW_ARCHS: ${{ matrix.arch }}
+        env:  
+          CIBW_BUILD: ${{ matrix.build[0] }}${{matrix.arch[0]}}
+          CIBW_ARCHS: ${{ matrix.arch[0] }}
           CIBW_MANYLINUX_X86_64_IMAGE: "dockcross/manylinux_2_28-x64"
+          CIBW_MANYLINUX_AARCH64_IMAGE: "dockcross/manylinux2014-aarch64"
           CIBW_REPAIR_WHEEL_COMMAND: ""
           CIBW_ENVIRONMENT: CMEEL_LOG_LEVEL="DEBUG" CMEEL_TEMP_DIR=/tmp/cmeel_out/ CMEEL_CMAKE_ARGS="-DPYTHON_INCLUDE_DIR=${{ env.PYTHON_INCLUDE_DIR }} -DPYTHON_PREFIX=/tmp/cmeel_out/whl/cmeel.prefix/lib/${{matrix.build[1]}}/site-packages/"
           CMEEL_TEMP_DIR: /tmp/cmeel_out/
