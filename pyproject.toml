@@ -7,7 +7,7 @@ description = "cmeel distribution for CasADi - a symbolic framework for numeric 
 license = "EPL-2.0"
 name = "cmeel-casadi"
 requires-python = ">= 3.9"
-version = "0.1.1"
+version = "0.1.2"
 
 [project.urls]
 homepage = "https://github.com/lvjonok/cmeel-casadi"
